@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>轮播</title>
+	<style>
+	*{padding: 0px;margin: 0px;}
+     #main{width:1000px; height: 666px; position: relative ;margin:0 auto; overflow: hidden;}
+     #main ul{position:absolute;width: 4000px;height: 666px;}
+     #main ul li{float: left;list-style: none;display: block;}
+     #prev{width: 39px;height: 60px;float: left;position: absolute;background: transparent url("http://tuanwei.sise.cn/css/themes.png") no-repeat left top;left: 10px; z-index: 301;top: 300px;}
+     #next{width: 39px;height: 60px;float: right;position: absolute;background: transparent url("http://tuanwei.sise.cn/css/themes.png") no-repeat right top;right: 10px; z-index: 301;top: 300px;}
+    .select{background-color: #F40;}
+     #menu{border-radius: 10px;position: absolute;text-align: center;font-size: 0px;background: rgba(255, 255, 255, 0.5) none repeat scroll 0% 0%;left:50%;top:90%;margin-left: -45px;}
+	#menu li{display: inline-block;margin:2px;background-color: #B7B7B7;border-radius: 50%;}
+	#menu li a{display: block;padding-top: 9px;width: 9px;height: 0px;border-radius: 50%;}
+	</style>
+
+	<script>
+	window.onload=function(){
+		var select=0;
+		var main=document.getElementById('main');
+		var BigPic=document.getElementById('BigPic')
+		var img = main.getElementsByTagName('li');
+		var prev=document.getElementById('prev');
+		var next=document.getElementById('next');
+		var menu=document.getElementById('menu');
+		var menu_li=menu.getElementsByTagName('a');
+		var index=0;
+
+
+		var timer=null;
+		var autotimer=null;
+
+
+		function buttonControl(i){
+			for(var i=0;i<menu_li.length;i++){
+				menu_li[i].className='select';
+				menu_li[i].className='';
+			}
+			menu_li[index - 1].className='select';
+			
+		}
+
+		for(var i=0;i<img.length;i++){
+			img[i].index=i;
+			menu_li[i].index=i;
+			menu_li[i].onmouseover=function(){
+				clearInterval(autotimer);
+				play(this.index);
+
+			}
+			menu_li[i].onmouseout=function(){
+				auto(this.index);
+			}
+
+			img[i].onmouseover=function(){
+				clearInterval(autotimer);
+				play(this.index);				
+			};
+		    img[i].onmouseout=function(){
+				auto(this.index);
+			}
+		}
+
+		auto(1);
+		function auto(start){
+			clearInterval(autotimer);
+			var i = start;
+			autotimer=setInterval(function(){
+			 play(i);
+				i++;
+				if(i == img.length)
+				{
+				 i=0;
+				}
+			},2000);
+		}
+
+		function play(i){
+			clearInterval(timer);
+			var target = -i * 1000;	
+			menu_li[select].className='';
+			select=i;
+			menu_li[select].className='select';	
+			timer=setInterval(function(){
+			var speed= (target - BigPic.offsetLeft )/10;
+			speed = speed>0?Math.ceil(speed):Math.floor(speed);
+			if(BigPic.offsetLeft == target)
+			{
+				clearInterval(timer);
+			}
+			BigPic.style.left=BigPic.offsetLeft+speed+'px';
+		   },15);
+		}
+
+		//左右轮播控制的按钮方法
+		function animate(offset){
+			var newLeft=parseInt(BigPic.style.left)+offset;
+			/*var time=300;
+			var Interval=10;
+			var speed= offset/(time/Interval);  //每次位移偏移量
+
+			function goto(){
+				if(speed>0 && newLeft<left){
+					list.style.left=newLeft+Math.ceil((left-newLeft)/timer) +"px";
+					setTimeout(go,timer);
+				}else if(speed<0 && newLeft>left){
+					list.style.left=newLeft-Math.ceil((newLeft-left)/timer) +"px";
+			  }*/
+
+			BigPic.style.left=newLeft+'px';
+			if(newLeft<-3000){
+				BigPic.style.left=0+'px';
+			}
+			if (newLeft>0) {
+				BigPic.style.left=-3000+'px';
+			}
+
+		}
+		
+		next.onclick=function(){
+			clearInterval(autotimer);
+			if(index ==4){
+				index =1;
+			}
+			else{
+				index+=1;
+			}
+			animate(-1000);
+			buttonControl();
+			
+		}
+
+		prev.onclick=function(){
+			clearInterval(autotimer);
+			if(index ==1){
+				index+=4;
+			}
+			else{
+				index-=1;
+			}
+				
+			animate(1000);
+			buttonControl();
+		}
+			
+ }		
+	</script>
+</head>
+<body>
+    <div id="main">
+		  <ul id="BigPic">
+			<li><img src="http://www.sise.com.cn/sise/fengmian/fmgs_59/images/neirong/09/36.JPG"/></li>
+			<li><img src="http://www.sise.com.cn/sise/fengmian/fmgs_59/images/neirong/09/33.JPG"/></li>
+			<li><img src="http://www.sise.com.cn/sise/fengmian/fmgs_59/images/neirong/08/4.JPG"/></li>
+			<li><img src="http://www.sise.com.cn/sise/fengmian/fmgs_59/images/neirong/11/01.JPG"/></li>
+		 </ul>
+	 <a id="prev" href="javascript:void(0)"></a>
+	 <a id="next" href="javascript:void(0)"></a>
+	</div>
+   <div id="Small">
+	   	<ul id="menu">
+			<li ><a class="select"></a></li>
+			<li><a></a></li>
+			<li><a></a></li>
+			<li><a></a></li>
+		</ul>
+   </div>
+
+
+</body>
+</html>
