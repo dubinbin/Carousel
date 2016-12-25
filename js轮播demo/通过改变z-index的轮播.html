@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>slide</title>
+	<style>
+	*{margin:0;padding: 0;}
+ 	/*切换动效*/ 
+ 	.show{
+    	animation: 3s opacity2 0s infinite; 
+    	-webkit-animation: 2s opacity2 0s infinite;
+    	-moz-animation: 3s opacity2 0s infinite;
+    }
+    @keyframes opacity2{
+        0%{opacity: 0}
+        50%{opacity: 0.5}
+        80%{opacity: 0.8}
+        100%{z-index:1}
+    }
+    @-webkit-keyframes opacity2{
+        0%{opacity: 0}
+        50%{opacity: 0.5}
+        80%{opacity: 0.8}
+        100%{z-index:1}
+    }
+    @-moz-keyframes opacity2{
+        0%{opacity: 0}
+        50%{opacity: 0.5}
+        80%{opacity: 0.8}
+        100%{z-index:1}
+    }
+	ul li img{
+		width: 100%;
+		position: relative;
+	}
+	ul li{
+		list-style: none;
+		position: absolute;
+	}
+	#slide{
+		width: 1200px;
+		height: 533px;
+	}
+	.active{
+		z-index: 999;
+/*		animation: 3s opacity2 0s infinite; 
+    	-webkit-animation: 2s opacity2 0s infinite;
+    	-moz-animation: 3s opacity2 0s infinite;*/
+	}
+	</style>
+	<script>
+		window.onload=function(){
+			var autotimer;
+			var oli = document.querySelectorAll('li');
+
+			for(var i=0;i<oli.length;i++){
+				 oli[0].classList.add('active');
+				 return function(i){
+				       var ImgLength = parseInt(oli.length)-1;   //k  ImgLength
+				       if(oli[i].classList.contains('active')){
+					   	var currentLi = parseInt(i);
+					  	auto(currentLi,ImgLength);
+					}
+				}(i);
+			}
+
+			function auto(j,k){
+				clearInterval(autotimer);
+				autotimer = setInterval(function(){
+					if(j<k){
+						oli[j].classList.remove('active');
+						j++;
+						oli[j].classList.add('active');
+					}
+					else if(j>=k){
+						oli[j].classList.remove('active');
+						j=0;
+						oli[j].classList.add('active');
+					}
+					else{
+						console.log("按照基本法，这个else的情况是不可能发生的，写着结构好看");
+					}
+				},3500)
+			}
+		}
+	</script>
+</head>
+<body>
+<div id="slide">
+	<ul id="slide">
+		<li><img src="bannerA.jpg" alt=""></li>
+		<li><img src="bannerB.jpg" alt=""></li>
+		<li><img src="bannerC.jpg" alt=""></li>
+	</ul>
+</div>	
+</body>
+</html>
